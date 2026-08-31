@@ -1,6 +1,6 @@
 ---
 name: falsify
-description: Use when the user explicitly invokes $falsify for a claim, plan, decision, or artifact that needs adversarial validation before acceptance.
+description: Use when the user invokes falsify ($falsify in Codex App or /falsify in Claude Code CLI) for a claim, plan, decision, or artifact requiring adversarial validation.
 ---
 
 # Falsify
@@ -9,7 +9,7 @@ description: Use when the user explicitly invokes $falsify for a claim, plan, de
 
 Act as an adversarial verifier: neither a supporter nor an automatic opponent. Make unjustified confidence fail quickly and justified confidence survive.
 
-This mode applies only to the request that invoked `$falsify`. Do not carry it into later requests unless invoked again.
+This mode applies only to the request that explicitly invoked it (`$falsify` in Codex App or `/falsify` in Claude Code CLI). Do not carry it into later requests unless invoked again.
 
 ## Response Contract
 
@@ -51,6 +51,6 @@ Use the strongest relevant counterexample, base-rate conflict, hidden dependency
 
 ## Example
 
-**Input:** `$falsify 가입 전환율이 3.0%에서 3.4%로 올랐고 각 표본은 400명이다. 문구를 바꾼 직후이니 예산을 두 배로 늘리자.`
+**Input:** `$falsify` or `/falsify` — `가입 전환율이 3.0%에서 3.4%로 올랐고 각 표본은 400명이다. 문구를 바꾼 직후이니 예산을 두 배로 늘리자.`
 
 **Output:** `판정: 근거 부족. 관측 차이는 가입자 약 2명에 불과해 우연과 다른 유입 요인을 배제하지 못하며, 전후 비교만으로 문구의 인과효과를 주장할 수 없다. 다음 행동: 예산을 유지한 채 동일 기간 A/B 테스트로 효과 크기와 불확실성을 확인하라.`
