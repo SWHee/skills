@@ -1,0 +1,7 @@
+interface:
+  display_name: "Atelier"
+  short_description: "Codex와 Claude를 역할별로 조율하는 교차 모델 작업실"
+  default_prompt: "$atelier를 사용해 역할과 모델을 배정하고 구현·검증·리뷰까지 조율해줘."
+
+policy:
+  allow_implicit_invocation: true
