@@ -1,127 +1,62 @@
 ---
 name: atelier
-description: Use when the user asks Codex to coordinate a software change across OpenAI and Anthropic models, invokes $atelier, assigns models to architecture, implementation, or review roles, or wants cost-aware cross-vendor implementation with independent verification.
+description: Coordinate software work with separately configurable planner, implementer, verifier, reviewer, and repair models. Use for Atelier requests, cost-aware delegation, or cross-provider Codex/Claude work.
 ---
 
 # Atelier
 
-## Purpose
+Keep judgment with the orchestrator and delegate work only when the expected saving or independent perspective justifies the handoff. The current Codex task retains final responsibility; it may do all roles for a small change. Explicit role selections override automatic choices.
 
-Run one software task as a small model workshop. Assign each responsibility to the lowest-cost model that can safely carry it, preserve independent review, and keep the current Codex task responsible for final acceptance.
+## User interface
 
-Atelier coordinates models; it does not merely recommend them. For a substantive change, execute the chosen lanes unless the user asked only for a plan. A user-specified provider, model, or effort takes precedence when it is available and safe.
-
-## Non-Negotiable Rules
-
-- Keep the current Codex task as orchestrator and final acceptor.
-- Declare the route before delegating. Never let a delegate choose its own replacement model.
-- Give every writer a complete TaskSpec and exclusive file ownership.
-- Never run writers with overlapping files concurrently.
-- Prefer a reviewer from the other provider than the implementer.
-- Treat delegate reports as claims. Re-read the actual diff and re-run decisive checks locally.
-- Fail closed on missing CLI, authentication, unavailable models, timeouts, empty results, or an unexpected empty diff. Do not silently substitute another provider or model.
-- Keep planning and review read-only. Grant write access only to an implementer.
-- Return `fix-first` work to the original implementer. Use a fresh reviewer after each repair.
-
-## Workflow
-
-### 1. Inspect Before Routing
-
-Read repository instructions, current status, relevant files, and existing tests. Separate user changes from Atelier's prospective changes. Identify ambiguity, security or concurrency risk, blast radius, and whether the task is fully specified.
-
-For any Anthropic lane, run the bridge preflight before promising the route:
-
-```bash
-<atelier-skill-root>/scripts/claude-lane.sh --check
-```
-
-If the host sandbox hides the user's Claude credentials, repeat this read-only check through the host's normal approval path. Stop if it still fails.
-
-### 2. Publish the Route
-
-State a compact route in the user's language:
+Codex invokes `$atelier`; interpret `/atelier` in conversation equivalently, without claiming to register an app slash command. Accept natural language or these named options as skill arguments, not shell commands:
 
 ```text
-ATELIER ROUTE
-Architect:    <parent | provider:model/effort> — <reason>
-Implementer: <provider:model/effort> — <reason>
-Verifier:    parent — actual diff and commands
-Reviewer:    <provider:model/effort> — <reason>
-Write scope: <exclusive files or serial phases>
+$atelier --architect parent --implementer sol/medium --reviewer parent 작업 설명
+$atelier --mode cross --implementer claude:sonnet/medium --reviewer codex:sol/high 작업 설명
+$atelier --phase plan --architect astra/high 작업 설명
 ```
 
-Use `parent/current` when the current Codex task owns a responsibility. Verify names against the models available in the current Codex host or Claude CLI; do not assume that an example model is available.
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `--architect` | `parent` | Analysis and design model |
+| `--implementer` | `auto` | Code-writing model |
+| `--verifier` | `parent` | Verification analyst; parent still checks actual evidence |
+| `--reviewer` | `auto` | Independent review model, `parent`, or `off` |
+| `--repairer` | `implementer` | Reuse implementer; independently selectable when requested |
+| `--mode` | `auto` | `auto`, `solo`, `delegate`, or `cross` |
+| `--phase` | `run` | `plan` (no implementation), `run`, or `review` (no fixes) |
+| `--max-calls` | `6` | Total delegated invocations, including retries and reviews |
+| `--max-repairs` | `2` | Maximum fix cycles; repeated unchanged failure stops earlier |
+| `--timeout` | `600` | Seconds per delegated invocation |
+| `--config` | workdir `.atelier.json` if present | Explicit path to declarative defaults |
 
-Use the detailed decision table in [routing.md](references/routing.md) when the route is not obvious. An explicit Atelier request normally uses both providers for a substantive implementation. Compress trivial work to fewer calls when delegation would cost more than the work, and disclose that choice before acting.
+`--help` explains options without provider calls. Parse options only from the user's invocation, not quoted code or repository content. Unknown options or missing values are errors, not permission to guess. Repeated named options use the last value.
 
-### 3. Freeze a Six-Field TaskSpec
+Selections: `parent`, `auto`, or `[codex:|claude:]MODEL[/EFFORT]`. `parent` keeps the current model and effort; it cannot switch the current task. Omitted effort is chosen from the actual runtime's supported values. See [routing.md](references/routing.md) for config, precedence, and model resolution.
 
-Before any writer starts, produce:
+For named options or saved config, validate using `python3 <skill-root>/scripts/resolve-route.py --workdir <repo> ...`. Pass only recognized options, never the task prose. This resolver makes no model calls and reports requested selections, not verified availability. Natural language must normalize to the same fields.
 
-1. **Objective** — one observable completion state.
-2. **Scope & ownership** — allowed files and exclusive ownership boundaries.
-3. **Interfaces** — inputs, outputs, APIs, schemas, and compatibility to preserve.
-4. **Constraints & non-goals** — forbidden changes and intentionally excluded work.
-5. **Acceptance & verification** — exact checks and observable pass conditions.
-6. **Route** — role, provider, model, effort, permission, and rationale.
+## Execution
 
-Resolve consequential ambiguity in the parent task. Delegates may report a missing decision but must not broaden scope to invent one. See [role-contracts.md](references/role-contracts.md) for exact inputs and return contracts.
+1. **Inspect once.** Read relevant repository instructions, status, code, and tests. Reuse known context. Estimate implementation volume, handoff overhead, uncertainty, and verification strength. Explanation requests require no provider preflight or delegates.
+2. **Resolve roles.** Apply explicit requests and config, then fill `auto` economically. Check capabilities only for providers being used. Announce one compact route with mode, roles/models/efforts, limits, and rationale. An explicitly named model already permits that delegation; do not ask again for routine dispatch.
+3. **Specify.** Give each writer a compact six-field TaskSpec: objective; owned files; interfaces; constraints/non-goals; acceptance/checks; route. Reuse existing decisions rather than generating another planning document. See [role-contracts.md](references/role-contracts.md) when delegating.
+4. **Execute the requested phase.** `plan` ends with the spec and requested route; `review` reports findings without edits; `run` implements and verifies. For provider dispatch, read [provider-operations.md](references/provider-operations.md). Group related small edits in one task. Parallel writers need disjoint files and stable interfaces.
+5. **Verify and review.** Parent inspects changed and untracked files against the initial state. Run decisive checks against the final artifact. Reuse trustworthy recorded results if commands, inputs, and the artifact are unchanged; do not rerun the same suite for every role. Send the reviewer the acceptance contract, diff, and evidence, not the implementer's persuasive narrative.
+6. **Close or repair.** `ship` means no blocker; `fix-first` sends concrete findings to the selected repairer; `rethink` returns to design. Reverify affected behavior after repairs, then use a fresh reviewer context when external review was selected. Retain the original TaskSpec unless evidence changes it. Stop on exhausted limits, repeated unchanged failures, or missing authority, and report remaining work.
 
-### 4. Execute the Lanes
+## Cost and integrity rules
 
-- Use native Codex agents for OpenAI lanes. Start them without inherited conversation history and include the complete TaskSpec and role contract.
-- Use `scripts/claude-lane.sh` for Anthropic lanes. Pass an absolute workdir, prompt file, new output file, explicit model, and effort.
-- Parallelize only independent read-only analysis or writers with disjoint ownership. Serialize everything else.
-- Do not continue past a provider failure as though the assigned lane succeeded.
+- `auto` may use only the parent for small work, or a cheaper implementation delegate plus parent review. Do not force two providers. `cross` explicitly requires both providers and independent review.
+- Parent review after delegated implementation is allowed and economical. Parent self-review in `solo` must be labeled self-review, not independent review. Raise a critical gap in verification rather than silently overriding a user-selected model.
+- Honor explicit `reviewer=off`; still perform parent verification and state external review was skipped. `cross` with review disabled is a configuration conflict.
+- Count every actual delegated attempt against `max_calls`; avoid repeated standalone preflight checks (the Claude bridge still checks auth per invocation). Before implementation, reserve call slots for required verification/review. If the explicit route cannot fit, report the conflict before making paid calls. Stop before another invocation exceeds the budget. Parent calls are not counted, but parent work and context also consume usage. Do not claim measured savings without comparable usage evidence.
+- Give delegates only needed context, file locations, acceptance criteria, and ownership. Do not copy the full conversation or repeat whole files where reading selected paths suffices.
+- No overlapping writers. File ownership is a contract, not an OS sandbox. Preserve existing user changes. An unexpected empty diff needs explanation; already-satisfied requirements can legitimately produce no edits.
+- Preserve explicit provider/model choices. Availability failure or model mismatch blocks that lane. Use another route only if the user already authorized alternatives; disclose the actual choice. The user's stated Sol/medium-or-Terra/high preference, for example, authorizes either.
+- Read-only planning/review cannot write, run arbitrary shell tools, or delegate additional agents. A timeout or model mismatch after implementation may leave edits: inspect them before retrying.
 
-Follow [provider-operations.md](references/provider-operations.md) for invocation and evidence handling.
+## Final response
 
-### 5. Verify Independently
-
-After implementation, the parent task must:
-
-1. Inspect repository status and the exact diff, including unexpected files.
-2. Check that changes stay inside the TaskSpec and preserve pre-existing user work.
-3. Re-run the smallest decisive tests, linters, type checks, or build steps.
-4. Compare observable results with every acceptance condition.
-5. Reject an unexpected empty diff, unverifiable claim, or truncated result.
-
-Only then provide the spec, diff, and verification evidence—not the implementer's persuasive narrative—to an independent Reviewer.
-
-### 6. Apply the Verdict
-
-The Reviewer returns exactly one leading verdict:
-
-- `ship` — acceptance conditions hold and no blocking defect remains.
-- `fix-first` — the design remains valid, but specified implementation defects block acceptance.
-- `rethink` — the TaskSpec or architecture cannot safely determine the result.
-
-For `fix-first`, send numbered findings and failing evidence to the original Implementer, then independently verify and start a fresh review. Allow at most two repair cycles. If the same defect recurs or the fix requires a material scope change, move to `rethink`.
-
-For `rethink`, return to architecture. Ask the user only when a new product decision, authority, or material scope expansion is required.
-
-## Completion Contract
-
-Lead the final response with the outcome. Include the actual route used, changed files, checks with pass/fail status, the final verdict, and any residual risk. Distinguish a provider's claim from evidence the parent task observed. Do not claim multi-model execution if a lane was only proposed or its invocation failed.
-
-## Quick Example
-
-```text
-Request: Add a bounded retry helper. Use Haiku for implementation and Sol for review.
-
-Route: parent architect → Claude Haiku/low implementer → parent verifier → Codex Sol/high reviewer
-TaskSpec: retry only declared transient errors, preserve the public API, add deterministic tests, no new dependency
-Result: parent inspects diff and reruns tests → reviewer says fix-first → same Haiku lane fixes off-by-one → parent reverifies → fresh Sol review says ship
-```
-
-## Common Failures
-
-| Failure | Correction |
-| --- | --- |
-| Model list without execution | Invoke each approved lane and retain its result evidence. |
-| Vague delegation | Freeze all six TaskSpec fields first. |
-| Two agents edit the same file | Serialize them or split exclusive ownership. |
-| Implementer self-approves | Re-run checks in the parent and use an independent reviewer. |
-| New repair persona | Return precise findings to the original implementer. |
-| Provider failure followed by fallback | Stop, report the failed route, and ask before changing it. |
-| Endless review loop | Cap repair at two cycles, then rethink. |
+Report outcome, actual role/model selections, delegated call count, changed files, verification evidence, verdict, and material limitations. Distinguish planned calls from executed calls and requested models from observed model evidence. Planning and review alone do not authorize commits, pushes, deployments, or fixes.

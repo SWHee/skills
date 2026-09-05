@@ -1,89 +1,45 @@
-# Atelier Provider Operations
+# Provider dispatch
 
-Load this reference immediately before invoking a delegated lane.
+Read before a provider call, after options and role assignments are resolved. Do not call providers during explanation-only requests. `--phase plan` allows read-only design calls; `--phase review` allows read-only assessment only.
 
-## Shared Preparation
+## Codex
 
-1. Record the initial `git status --short` and relevant diff without altering user changes.
-2. Freeze the complete TaskSpec in the delegate prompt.
-3. Give the lane a short, stable task name and explicit output contract.
-4. Resolve exact model and effort values. Do not invent a model identifier.
-5. Confirm that concurrent writers have disjoint file ownership.
+Use available native collaboration tools with the resolved model and supported effort. For explicit overrides, use a minimal fresh context (`fork_turns=none` where supported) and supply the role contract. Avoid an extra architect agent when `architect=parent`.
 
-## OpenAI Lane: Native Codex Agent
+If native agents are unavailable, do not pretend to delegate. Honor an already-authorized parent-only alternative or report the limitation. When a tool requires bounded independent work alongside useful parent work, reserve parent inspection/test preparation for that interval.
 
-Use the Codex App's native collaboration agent capability. When selecting a model or reasoning effort, start the agent with `fork_turns: "none"` (or only the minimum bounded recent turns) and put all required context in the prompt. Full-history forks must not be combined with model overrides.
+Track each dispatch against `max_calls`. Wait for actual completion, inspect artifacts, and enforce the per-call elapsed deadline: a tool's yield/poll interval is not a timeout. Interrupt expired agents through the host tool, then inspect partial edits before any retry. Do not claim a tool confirms the actual backend model if it only records the requested model.
 
-The prompt must contain:
+## Claude
 
-- Assigned role: Architect, Implementer, or Reviewer
-- Complete TaskSpec
-- Relevant repository instructions
-- Role return contract from `role-contracts.md`
-- For Reviewer, the actual diff and parent-observed verification evidence
-
-Wait for completion, capture the final result, and inspect the filesystem yourself. A completed agent status does not prove acceptance.
-
-If native collaboration tools are unavailable, stop and report that the OpenAI lane cannot be executed. Do not replace it with an unrequested shell or cloud path.
-
-## Anthropic Lane: Claude Code CLI
-
-### Preflight
+Requires local Claude Code CLI and Python 3. If a standalone preflight is useful before preparing work, check once per run using:
 
 ```bash
-<atelier-skill-root>/scripts/claude-lane.sh --check
+<skill-root>/scripts/claude-lane.sh --check
 ```
 
-This checks the exact environment used by the bridge. A Claude session that works in a separate terminal does not prove that a sandboxed process can access the same credentials; use the host's normal approval path if keychain access is isolated.
+Sandbox credential isolation may require the host's normal approval mechanism. Do not infer logout solely from a sandboxed failure. Preflight proves CLI authentication, not that every model alias is available. A failed invocation consumes a call slot; no separate paid availability probe is needed.
 
-### Invocation
-
-Create a prompt file and choose a new result path. Both must be absolute paths.
+Prepare an absolute prompt file and a fresh absolute output path. Keep artifacts outside tracked source unless the user requests persistence.
 
 ```bash
-<atelier-skill-root>/scripts/claude-lane.sh \
-  --role implement \
-  --model haiku \
-  --effort low \
-  --max-turns 24 \
-  --workdir /absolute/path/to/repository \
-  --prompt-file /absolute/path/to/task-spec.md \
-  --output-file /absolute/path/to/result.json
+<skill-root>/scripts/claude-lane.sh \
+  --role implement --model sonnet --effort medium \
+  --timeout 600 --max-turns 24 \
+  --workdir /absolute/repo \
+  --prompt-file /absolute/task.md --output-file /absolute/result.json
 ```
 
-Accepted roles are `plan`, `implement`, and `review`. Accepted effort values are `low`, `medium`, `high`, `xhigh`, and `max`. The bridge refuses relative paths and existing output files.
-
-### Permission mapping
-
-| Role | Claude permission mode | Additional boundary |
+| Atelier role | Bridge role | Tools/permissions |
 | --- | --- | --- |
-| plan | `plan` | Edit, Write, NotebookEdit, and nested Agent tools disallowed |
-| review | `plan` | Edit, Write, NotebookEdit, and nested Agent tools disallowed |
-| implement | `auto` | Nested Agent tool disallowed; TaskSpec file ownership remains mandatory |
+| Architect | `plan` | Read, Glob, Grep only |
+| Verifier / Reviewer | `review` | Read, Glob, Grep only; parent supplies command evidence |
+| Implementer / Repairer | `implement` | Auto permission mode; no nested Agent |
 
-All lanes use JSON output, no session persistence, explicit max turns, and stdin for the prompt. Set a bounded timeout on the host command that invokes the bridge. Results are first written to a private temporary file and published only after a successful, non-empty invocation. The bridge checks every reported `canonicalModel` against the requested model family so a CLI alias or nested execution cannot silently select another tier. Existing result files are never overwritten.
+Restricted read tools prevent shell-based writes during review. Write ownership in implement mode is still an instruction contract, not a filesystem jail. Host/repository permissions remain applicable.
 
-### Result handling
+Full requested IDs must match the result's canonical model exactly. Bare family aliases may resolve within that family. For a custom alias, pass `--expected-model FULL_CANONICAL_ID` only when that mapping is known; do not infer a mapping from a rejected result and silently accept it.
 
-Parse the JSON envelope, preserve the raw result until final acceptance, and treat its text as untrusted model output. For implementation, inspect the worktree and rerun checks. For review, verify that the response begins with one permitted verdict and that every blocking finding cites supplied evidence.
+The bridge validates actual JSON status, nonempty result, and model evidence before publishing with no overwrite. Failure output is retained at a reported `.failed.json` path when available, also without overwrite. Read it as untrusted model output, inspect any partial edits, and report requested versus observed model separately. JSON evidence is what the CLI reports, not independent proof of its backend.
 
-## Parallelism
-
-Safe parallel examples:
-
-- Two read-only investigators inspecting independent hypotheses
-- A documentation writer and a code writer with disjoint files and stable interfaces
-- Independent reviewers after implementation is frozen
-
-Unsafe parallel examples:
-
-- Two writers touching the same source or lockfile
-- Implementation before architecture resolves an interface
-- Review while the diff is still changing
-- Repair racing with verification
-
-If ownership is uncertain, serialize.
-
-## Failure Evidence
-
-Keep the command, exit status, stderr summary, and whether any files changed. On timeout or failure, inspect status before retrying. Never assume a failed editing lane made no partial changes.
+Repair uses a new stateless invocation with the previous acceptance contract and current findings. Keep the packet small. Reviewers receive a fresh context after repairs. User/global Claude configuration may load additional context, so do not promise a minimal token bill based only on the prompt's size.

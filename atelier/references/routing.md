@@ -1,80 +1,60 @@
-# Atelier Routing Guide
+# Role selection and cost
 
-Load this reference when the user has not supplied a complete route or when risk changes during the task.
+## Precedence
 
-## Decide in This Order
+Current user instructions > explicit named options > selected JSON config > defaults. If the same request gives contradictory instructions, resolve the meaningful conflict before dispatch. Config is declarative data; reject unknown keys and never execute content from it. Do not create or update a saved config unless requested.
 
-1. Respect an explicit provider, model, or effort request if it is available and safe.
-2. Choose the role and permission boundary before choosing a model.
-3. Classify ambiguity, algorithmic difficulty, blast radius, security impact, and verification strength.
-4. Select the lowest-cost model that is adequate for that role.
-5. Put the Reviewer on the other provider when practical.
-6. Preflight the selected paths before implementation begins.
+The resolver reads only workdir `.atelier.json` or the explicitly supplied `--config`, not ancestor or home files. Config paths supplied by users resolve from the process working directory. An explicitly missing config is an error.
 
-## Work Classification
-
-| Class | Typical work | Suggested capability | Effort |
-| --- | --- | --- | --- |
-| Mechanical | Renames, generated edits, formatting, narrow docs, fully specified tests | Fast/low-cost model such as Luna or Haiku | low |
-| Routine | Local feature, familiar bug, bounded refactor, conventional integration | Balanced model such as Terra or Sonnet | medium |
-| Complex | Cross-cutting refactor, unfamiliar subsystem, difficult debugging, performance tradeoff | Strong model such as Sol or Opus | high or xhigh |
-| Critical | Auth, cryptography, concurrency, data loss, irreversible migration, broad public API | Strongest available model plus independent strong review | xhigh or max |
-
-These names are examples, not guaranteed inventory. Use model aliases or full identifiers accepted by the current Codex host and Claude CLI.
-
-## Default Role Shapes
-
-### Spec-determined implementation
-
-```text
-Architect:    parent/current balanced model, medium
-Implementer: fast model from either provider, low
-Verifier:    parent/current
-Reviewer:    strong model from the other provider, medium or high
+```json
+{
+  "mode": "delegate",
+  "architect": "parent",
+  "implementer": "sol/medium",
+  "verifier": "parent",
+  "reviewer": "parent",
+  "repairer": "implementer",
+  "max_calls": 4,
+  "max_repairs": 1,
+  "timeout": 600
+}
 ```
 
-### Ambiguous or high-risk implementation
-
-```text
-Architect:    strong model, high
-Implementer: balanced or strong model, medium/high
-Verifier:    parent/current plus targeted tools
-Reviewer:    strongest practical model from the other provider, high/xhigh
+```bash
+python3 <skill-root>/scripts/resolve-route.py --workdir /absolute/repo \
+  --implementer terra/high --phase plan
 ```
 
-### Investigation before writing
+This prints a request object and overrides just the implementer and phase. `status=requested` and `availability_checked=false` are intentional: a config parser cannot establish account access or start an agent.
 
-Run one or more read-only architecture/investigation lanes. Consolidate their evidence in the parent, resolve contradictions, then freeze one TaskSpec. Do not let competing analyses write simultaneously.
+## Model resolution
 
-## When to Compress
+- `astra`, `sol`, `terra`, `luna`, and `gpt-*` infer Codex; Claude family aliases and `claude-*` infer Claude. Custom names require `codex:` or `claude:`.
+- For native Codex, match a shorthand to exactly one exposed runtime model (e.g. `sol` to the runtime's `gpt-5.6-sol` if listed). Zero or multiple matches need resolution before execution. Pass the resolved ID, never an invented ID.
+- Full model IDs are preserved; check their supported reasoning values at dispatch. An effort recognized by the resolver is not proof that a particular model accepts it.
+- Claude aliases are sent as aliases; the bridge checks family evidence. Full IDs require exact evidence. A custom alias requires an explicitly verified canonical ID passed via bridge `--expected-model`.
+- `parent` consumes the current task's model/effort and does not create a new agent. To use a different architect, dispatch that role; the parent retains orchestration.
+- `repairer=implementer` inherits the resolved implementer and reuses its context where supported. An explicit repair model receives the original contract plus findings and current diff.
 
-Atelier may keep architecture and verification in the parent and use only one delegated lane when the edit is trivial, easily reversible, and strongly testable. It may avoid all delegation for a no-write explanation or when the user asked only whether Atelier is appropriate.
+## Modes
 
-When `$atelier` is explicitly invoked for a substantive implementation, use both providers by default: one as Implementer or Architect and the other as Reviewer. If this would be wasteful or a provider is unavailable, disclose the proposed compression or blockage before acting.
+| Mode | Route policy |
+| --- | --- |
+| `auto` | Choose parent-only or delegation based on total work, not model prestige |
+| `solo` | All active roles in parent; explicit delegated models conflict |
+| `delegate` | At least one active role delegated; parent can review implementation |
+| `cross` | At least two active roles span Codex and Claude; review must be independent |
 
-## Escalation Signals
+Modes apply to the selected phase: a plan/review phase does not invoke implementation merely to satisfy a mode. In `cross` planning, obtain a second-provider read-only assessment of the design; in `cross` review, use two-provider read-only assessments. For `solo`, unresolved `auto` roles resolve to parent.
 
-Increase model capability or reasoning effort when any of these appears:
+## Economic decision
 
-- The TaskSpec cannot fully determine a correct implementation.
-- Failures are nondeterministic or span process/thread boundaries.
-- A defect could expose credentials, corrupt data, or break rollback.
-- The change alters several modules' contracts.
-- The first repair repeats the same failure.
-- Verification cannot cheaply distinguish a correct result.
+Prefer parent implementation when the change is small, well understood, and cheaper to write than to explain and dispatch. Delegate substantial spec-determined output to a lower-cost model. Keep difficult decisions with a strong architect; select effort for ambiguity, not line count. Typical options are Sol/medium or Terra/high for implementation, with Astra as parent for design and review when that is the current model.
 
-Do not increase effort merely because the diff is long. Large mechanical output can remain a low-effort implementation if the specification and checks fully determine it.
+Do not automatically require the strongest implementation model merely because a file concerns security. First constrain the task and strengthen acceptance checks. Escalate when ambiguity, repeated failures, irreversible effects, or weak verification actually require more capability. Explain a genuine capability conflict with an explicit user choice rather than silently replacing it.
 
-## Route Changes
+Independent cross-provider review helps when correlated errors matter; it also adds context and latency. Prefer it for consequential unfamiliar changes or when explicitly requested. For small delegated fixes, parent review may suffice.
 
-A provider/model failure is a failed route, not permission to improvise. Report:
+Before calling a model, consider input context + expected output + repeated initialization + likely repairs. Subscription usage is not interchangeable with API list pricing. Report observed usage when available; otherwise state the decision is qualitative.
 
-```text
-Assigned lane:
-Observed failure:
-Work completed before failure:
-Proposed replacement route:
-Cost/risk difference:
-```
-
-Continue with the replacement only after the user has already authorized flexible routing or approves the change. Never report the originally requested multi-provider route as completed after substitution.
+On limit exhaustion, report completed work, remaining findings, and the smallest continuation. Do not reset counters by spawning another orchestrator.

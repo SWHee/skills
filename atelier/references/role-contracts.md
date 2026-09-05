@@ -1,141 +1,42 @@
-# Atelier Role Contracts
+# Delegation contracts
 
-Load this reference when constructing prompts or deciding whether a result is complete.
+The parent owns scope, dispatch, and acceptance even when a separate architect is selected. Roles describe responsibilities, not mandatory extra agents.
 
-## Shared TaskSpec
+## TaskSpec
 
-Every delegate receives the same six fields. Do not send a link or a conversational summary in place of their contents.
+Include these six fields in a compact prompt, using repository-relative paths under an explicit workdir:
 
-```text
-Objective
-- Observable end state:
+1. Objective: observable end state.
+2. Scope: owned files, existing user changes, other writers.
+3. Interfaces: API/schema/compatibility constraints.
+4. Constraints: non-goals and prohibited side effects.
+5. Acceptance: exact checks and pass conditions.
+6. Route: role, resolved provider/model/effort, permission, timeout.
 
-Scope & ownership
-- Working directory:
-- Allowed files:
-- Forbidden or pre-existing user changes:
-- Other active writers:
+Reference specific files for further context. Do not hand off unexplained conversation history or create permanent planning artifacts for routine work.
 
-Interfaces
-- Inputs and outputs:
-- Public APIs or schemas:
-- Compatibility requirements:
+## Returns
 
-Constraints & non-goals
-- Required constraints:
-- Explicit non-goals:
+| Role | Return |
+| --- | --- |
+| Architect | Bounded TaskSpec, dependency/ownership boundaries, unresolved decisions |
+| Implementer | Changed paths, executed commands/results, unmet conditions, residual risks |
+| Verifier | Observed checks against current artifact, failures, missing evidence |
+| Reviewer | `ship`, `fix-first`, or `rethink`; findings with location, consequence and required correction |
+| Repairer | Implementer return plus disposition of each supplied finding |
 
-Acceptance & verification
-- Commands:
-- Observable pass conditions:
-- Expected diff or artifact:
+`blocked` is a valid execution status and must explain the missing decision/evidence. A delegate cannot broaden scope or independently change its model. Delegate success does not establish acceptance.
 
-Route
-- Role:
-- Provider and model:
-- Reasoning effort:
-- Permission: read-only | write
-- Selection rationale:
-```
+## Verification and review
 
-## Architect / Orchestrator
+Parent checks status and diff against the pre-task baseline, including untracked files. Prefer a focused test that discriminates the defect from the intended behavior. Repeat a check only after relevant changes, stale evidence, or unresolved doubt; do not run identical suites once per persona.
 
-### Input
+External reviewer context must be fresh and contain the spec, current diff, and verification evidence. It can read relevant surrounding code, but should not inherit the implementer's narrative. `ship` is not permission to deploy; it means the supplied acceptance conditions have no known blocker.
 
-- User request and repository instructions
-- Current worktree status and relevant implementation context
-- Model availability, provider authentication, and budget or latency constraints
+An explicitly selected verifier may analyze tests and evidence. Mechanical commands remain under parent control for read-only Claude roles; give them outputs rather than unrestricted shell access.
 
-### Required output
+## Repairs
 
-- One bounded TaskSpec per independent unit of work
-- Dependency order and exclusive file ownership
-- Risk classification: `low`, `medium`, or `high`
-- Route with an explicit reason for each model and effort choice
-- Decisions that remain with the user
+Default to the original implementer; honor an explicit repairer override. Keep context when available and useful. Claude's default bridge is stateless, so resend a small repair packet instead of claiming session continuity.
 
-### Must not
-
-- Edit implementation files while delegated architecture is still unresolved
-- Hide an authentication or availability failure by rewriting the route
-- Delegate product ambiguity that could materially change the requested outcome
-
-## Implementer
-
-### Input
-
-- The complete TaskSpec
-- Repository instructions relevant to owned files
-- Prior verifier/reviewer findings when this is a repair cycle
-
-### Required output
-
-```text
-Status: complete | blocked
-Changed files:
-- <path>: <purpose>
-Commands run:
-- <command>: <exit/result>
-Acceptance mapping:
-- <condition>: <evidence>
-Residual risks:
-- <risk or none>
-```
-
-### Must not
-
-- Modify files outside ownership
-- Expand scope, replace dependencies, or redesign public interfaces without returning `blocked`
-- Claim success from a test it did not run
-- Commit, push, deploy, or message external systems unless the TaskSpec explicitly authorizes it
-
-## Verifier
-
-The current Codex task owns mechanical verification even if a delegate also ran tests.
-
-### Required checks
-
-- Compare pre- and post-work status so existing user changes are not attributed to Atelier
-- Inspect the actual diff and untracked files
-- Re-run decisive commands in the repository, not in a delegate's narrative
-- Map evidence to every acceptance condition
-- Identify unexpected empty, partial, generated, or broad changes
-
-### Required output
-
-```text
-Verification: pass | fail | blocked
-Observed diff:
-- <paths and scope>
-Checks:
-- <command>: <observed result>
-Unmet conditions:
-- <condition or none>
-```
-
-## Reviewer
-
-Use a fresh context. Supply the TaskSpec, actual diff, and verifier evidence. Omit brainstorming history, implementer confidence, and social pressure.
-
-### Required output
-
-```text
-Verdict: ship | fix-first | rethink
-Blocking findings:
-1. <location, failure, evidence, required correction>
-Residual risks:
-- <non-blocking risk or none>
-```
-
-### Verdict rules
-
-- Choose `ship` only when every acceptance condition is supported by observed evidence.
-- Choose `fix-first` when the design is adequate and bounded code changes can correct the defect.
-- Choose `rethink` when the specification, ownership, architecture, or requested outcome must change.
-- Do not invent findings to justify the review lane. A clean change may receive `ship`.
-
-## Repair Cycle
-
-There is no separate repairer persona. Preserve the original Implementer's provider, model, and effort unless the Reviewer explicitly establishes that model capability—not just implementation error—is the blocker. Route changes require the parent to disclose the change.
-
-Send only numbered findings, failing evidence, and the unchanged TaskSpec. After repair, discard the prior Reviewer context and repeat verification before a new review.
+Provide original acceptance criteria, current diff, numbered findings, and failing evidence. Reverify affected behavior and refresh external review afterward. The repair limit is a ceiling, not a requirement to retry an unchanged failure. Report `rethink` when bounded implementation fixes no longer address the cause.
