@@ -1,26 +1,26 @@
 <div align="center">
 
-# Skills
+# skills
 
-**반복되는 판단과 작업 방식을 재사용 가능한 에이전트 스킬로.**
+### 자주 쓰는 판단 방식을, 다시 호출할 수 있는 에이전트 스킬로.
 
-Codex App을 중심으로 관리하는 개인용 AI 에이전트 스킬 허브입니다.
+Codex App을 중심으로 관리하는 개인용 AI 에이전트 스킬 아카이브입니다.
 
 </div>
 
-## 스킬
+## Collection
 
-| 스킬 | 용도 | 환경 | 호출 |
-| --- | --- | --- | --- |
-| [Atelier](./atelier/SKILL.md) | 역할·위험·비용에 따라 Codex와 Claude 모델을 교차 배치해 구현과 독립 검토를 조율 | Codex App + Claude Code CLI | `$atelier` |
-| [Falsify](./falsify/SKILL.md) | 주장·계획·결과물의 전제와 치명적 약점을 적대적으로 검증 | Codex App · Claude Code CLI | `$falsify` · `/falsify` |
+| Skill | What it does | Runtime |
+| --- | --- | --- |
+| [Atelier](./atelier/README.md) | 역할·비용·위험에 따라 Codex와 Claude 모델을 조율하는 소프트웨어 작업실 | Codex App + Claude Code CLI |
+| [Falsify](./falsify/README.md) | 주장·계획·결과물을 가장 강한 반례로 검증하는 적대적 검토 모드 | Codex App · Claude Code CLI |
 
-각 폴더의 `SKILL.md`가 해당 스킬의 공식 동작 계약입니다. 별도 설계·구현 계획 문서를
-중복 관리하지 않습니다.
+각 폴더의 `README.md`에는 사람을 위한 사용 안내와 예시가, `SKILL.md`에는 에이전트가
+따르는 실행 계약이 있습니다.
 
-## 설치
+## Install
 
-저장소를 받은 뒤 필요한 스킬 폴더를 심볼릭 링크로 연결합니다.
+저장소를 받은 뒤 원하는 스킬 폴더를 Codex에 심볼릭 링크로 연결합니다.
 
 ```bash
 git clone https://github.com/SWHee/skills.git
@@ -31,63 +31,22 @@ mkdir -p ~/.codex/skills
 ln -s "$PWD/$skill_name" "$HOME/.codex/skills/$skill_name"
 ```
 
-다른 스킬은 `skill_name`만 변경합니다. 같은 이름의 파일이나 링크가 이미 있다면
-덮어쓰지 말고 기존 설치를 먼저 확인하세요. 새 스킬은 다음 Codex 요청부터 사용할 수
-있습니다.
+다른 스킬은 `skill_name`만 바꾸면 됩니다. 이미 같은 이름이 설치되어 있다면 먼저
+대상을 확인하세요. 심볼릭 링크 설치는 저장소를 갱신하면 스킬도 함께 갱신됩니다.
 
-### Atelier 준비
+Claude Code CLI에서 사용하는 방법, 런타임 조건, 모델 조합은 각 스킬 README에서
+설명합니다.
 
-Atelier는 Codex가 작업을 지휘하고 로컬 Claude Code CLI를 Anthropic 실행 경로로
-사용합니다. Claude CLI가 설치되고 로그인된 환경에서 다음 사전 점검을 실행합니다.
+## Conventions
 
-```bash
-./atelier/scripts/claude-lane.sh --check
-```
+- 스킬 폴더 하나가 하나의 독립된 작업 방식입니다.
+- `SKILL.md`는 실행 규칙, `README.md`는 사용법, `agents/openai.yaml`은 Codex UI 메타데이터를 담당합니다.
+- `scripts/`와 `references/`는 반복 실행이나 세부 판단에 실제로 필요할 때만 둡니다.
 
-샌드박스에서만 인증이 보이지 않으면 Codex의 승인 경로로 다시 실행합니다. 실제
-터미널에서도 실패하면 `claude auth login`으로 로그인하세요. 요청 모델과 실행 결과의
-canonical model이 다르면 Atelier는 조용히 대체하지 않고 실패 처리합니다.
-
-```text
-$atelier 이 기능을 설계는 Terra/medium, 구현은 Sonnet/low,
-검토는 Sol/high로 배정해 구현과 검증까지 완료해줘.
-```
-
-### Falsify를 Claude Code에서도 사용하기
+## Verify
 
 ```bash
-mkdir -p ~/.claude/skills
-ln -s "$PWD/falsify" "$HOME/.claude/skills/falsify"
+python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py <skill-folder>
 ```
 
-Falsify는 명시적 호출 전용입니다. Claude Code CLI에서는 `skillOverrides`를 지원하는
-버전에서 `falsify`를 `user-invocable-only`로 설정하세요. Codex의 호출 정책은
-[`falsify/agents/openai.yaml`](./falsify/agents/openai.yaml)에 정의되어 있습니다.
-
-## 검증
-
-```bash
-python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py atelier
-atelier/scripts/test-claude-lane.sh
-```
-
-Atelier는 구조 검사, 격리된 브리지 회귀 테스트, 실제 Claude 인증·읽기 전용 호출,
-모델 불일치 차단을 검증했습니다. Falsify는 판정 우선, 핵심 반론, 무결함 반대 사례를
-검증했습니다.
-
-## 구조
-
-```text
-skills/
-├── atelier/
-│   ├── SKILL.md
-│   ├── agents/openai.yaml
-│   ├── references/
-│   └── scripts/
-├── falsify/
-│   ├── SKILL.md
-│   └── agents/openai.yaml
-└── README.md
-```
-
-선택 폴더는 실제 실행에 필요할 때만 추가합니다.
+스킬별 추가 테스트와 검증 범위는 해당 README에 있습니다.
