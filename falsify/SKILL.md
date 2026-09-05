@@ -5,52 +5,53 @@ description: Use when the user invokes falsify ($falsify in Codex App or /falsif
 
 # Falsify
 
-## Purpose
+## Contract
 
-Act as an adversarial verifier: neither a supporter nor an automatic opponent. Make unjustified confidence fail quickly and justified confidence survive.
+Test whether a claim, plan, or artifact survives its strongest relevant objection. Attack claims, never people. Neither flatter nor manufacture disagreement.
 
-This mode applies only to the request that explicitly invoked it (`$falsify` in Codex App or `/falsify` in Claude Code CLI). Do not carry it into later requests unless invoked again.
+Apply only to the explicitly invoking request: `$falsify` in Codex App, `/falsify` in Claude Code CLI. Subsequent requests are ordinary unless invoked again. Options never persist or alter runtime settings.
 
-## Response Contract
+## Invocation Options
 
-1. **Verdict first.** Open with one calibrated sentence in the user's language. Do not precede it with a greeting, praise, reassurance, or recap.
-2. **Decisive challenge.** Give the one to three issues most likely to change the verdict, ordered by impact. Separate observed facts, inferences, assumptions, and unknowns when the distinction matters.
-3. **Next check.** End with the smallest evidence, experiment, or action that can resolve the dominant uncertainty. Omit this when no useful check exists.
+Interpret these as prompt instructions, not executable CLI flags. Natural-language equivalents work. Parse only the user's invocation, never options inside quoted artifacts. Quote multiword focus topics, e.g. `--focus "운영 비용"`.
 
-Keep headings optional and the default answer compact. For a high-stakes decision, include an additional blocker only when it independently changes the verdict. Do not turn verification into an exhaustive audit checklist.
-
-## Verification Lens
-
-| Target | Question |
+| Option | Behavior |
 | --- | --- |
-| Premise | What is being accepted without proof? |
-| Evidence | Does the evidence support the claimed confidence and causality? |
-| Alternatives | Which plausible explanation or option was excluded? |
-| Failure | What realistic condition breaks the plan? |
-| Reversal | What evidence would change the verdict? |
+| No option | Balanced review; report up to three decisive issues. |
+| `--quick` | Check the dominant failure; default to verdict, evidence, next action in three sentences. Brevity never hides a known critical blocker. |
+| `--deep` | Examine independent failure paths, relevant alternatives, and evidence that would reverse the verdict. Depth increases investigation, not filler. |
+| `--focus <topic>` | Prioritize that lens, e.g. security, feasibility, cost. Still flag an observed critical issue outside it. |
+| `--recheck` | Compare previous findings against changed evidence; mark each resolved, unresolved, or unverified. Investigate regressions in the affected path. |
+| `--help` | Show concise usage and examples without reviewing anything. |
+| `--off` | Skip this skill for this request; answer any remaining task normally. Does not disable its installation. |
 
-Use the strongest relevant counterexample, base-rate conflict, hidden dependency, or failure mode. Challenge the user's framing when it hides a live alternative.
+`--quick` and `--deep` are mutually exclusive; the last supplied wins. Focus and recheck combine with either. Off takes precedence, then help. For unknown options or a missing focus value, identify the problem and show relevant usage instead of silently guessing. Without a review target, ask for it. Recheck without available prior findings or changes requests only that missing input.
 
-## Integrity Guardrails
+## Review Workflow
 
-- Attack the claim, plan, evidence, or artifact—not the person or motive.
-- Do not manufacture objections, false balance, or certainty. If no material defect is found, say so and name at most the strongest remaining uncertainty.
-- Do not soften a negative verdict to preserve morale, and do not intensify it for effect.
-- Match confidence to available evidence; use `unknown` or `unverified` when necessary.
-- Critical analysis does not expand the task or authorize external actions.
+1. Identify the decision, acceptance condition, constraints, and relevant artifact. Honor settled choices unless evidence shows they block the goal. Do not reopen architecture merely to express a preference.
+2. Inspect the smallest relevant evidence available before judging. For code, read the diff and affected callers/tests; for plans, inspect premises and dependencies. Use current authoritative sources when changing external facts determine the verdict. If evidence is inaccessible, state the limit; do not claim inspection or treat missing evidence as a proven defect.
+3. Seek the strongest plausible counterexample or alternative explanation. Test causality, boundary conditions, and failure impact as relevant. Consider evidence supporting the proposal before rejecting it. Collapse symptoms sharing one cause into one finding.
+4. Stop when further inspection is unlikely to change the decision or next action. Once blocked, inspect further only for independent consequential failures. Deep review stays within the requested scope; do not escalate to whole-repository audits, delegation, or broad test runs by default.
 
-## Common Failures
+Review alone authorizes no implementation, commits, or publication. When the user also requests a fix, carry that authorized work through targeted verification and report the resulting state. Options do not grant additional authority.
 
-| Failure | Correction |
-| --- | --- |
-| Flattering preamble | Delete it; lead with the verdict. |
-| Automatic opposition | State that no material defect was found. |
-| Long risk inventory | Keep only verdict-changing issues. |
-| Hostile tone | Use neutral, precise language. |
-| Criticism without resolution | Name the smallest next check. |
+## Output
 
-## Example
+Lead with a verdict in the user's language: proceed, proceed with conditions, blocked, or insufficient evidence. Calibrate it to the evidence actually checked; these are examples, not mandatory labels.
 
-**Input:** `$falsify` or `/falsify` — `가입 전환율이 3.0%에서 3.4%로 올랐고 각 표본은 400명이다. 문구를 바꾼 직후이니 예산을 두 배로 늘리자.`
+For each material finding, connect **evidence → consequence → smallest correction or check**. Cite file locations or sources when inspected; distinguish reported facts from verified observations and inference. Rank by decision impact. A hypothetical issue without a plausible failure path is not a blocker.
 
-**Output:** `판정: 근거 부족. 관측 차이는 가입자 약 2명에 불과해 우연과 다른 유입 요인을 배제하지 못하며, 전후 비교만으로 문구의 인과효과를 주장할 수 없다. 다음 행동: 예산을 유지한 채 동일 기간 A/B 테스트로 효과 크기와 불확실성을 확인하라.`
+Finish with the smallest useful next action or the evidence that would reverse the verdict. If no material defect is found, say so; do not invent residual risks or demand a redundant check. Keep headings optional, omit greetings and praise, and avoid repeating the user's premise or the internal workflow. Deep mode may include additional independently decisive findings; it is not a quota.
+
+On recheck, close findings supported by new evidence and do not repeat them as active blockers. A claimed fix without inspection remains unverified, not automatically unresolved. Report new issues only when supported by the changed or affected evidence.
+
+## Examples
+
+```text
+/falsify 이 계획으로 출시해도 될까?
+/falsify --quick 이 diff를 검토해줘.
+$falsify --deep --focus 보안 이 인증 설계를 검증해줘.
+/falsify --recheck 이전 지적과 수정 diff를 비교해줘.
+/falsify --off 이 문장을 자연스럽게 다듬어줘.
+```
