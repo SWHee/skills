@@ -1,0 +1,25 @@
+{
+  "name": "rationale",
+  "version": "0.2.0",
+  "description": "기술의 비용·설계·연쇄 영향을 조사해 결정을 돕고 개인 ADR 작성·검토를 선택적으로 연결하는 플러그인",
+  "author": {
+    "name": "skills-harry"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Rationale",
+    "shortDescription": "기술 결정 · ADR 작성 · ADR 검토",
+    "longDescription": "선택형 질문과 근거 조사로 비용·설계·운영·연쇄 변경을 비교합니다. 결정 지원만 받거나 개인용 MADR 작성까지 이어가고, 기존 ADR을 별도로 검토할 수 있습니다.",
+    "developerName": "skills-harry",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "후보 기술의 비용과 설계 영향을 깊게 조사하고 결정만 도와줘.",
+      "후보를 비교해서 개인 ADR 작성까지 진행해줘.",
+      "이미 정리한 결정을 ADR로 기록해줘."
+    ]
+  }
+}

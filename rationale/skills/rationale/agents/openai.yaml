@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rationale · 기술 결정"
+  short_description: "비용·설계·연쇄 영향을 조사하고 기술 선택의 판단을 지원"
+  default_prompt: "$rationale 후보 기술의 비용과 설계 영향을 조사해서 결정만 도와줘."

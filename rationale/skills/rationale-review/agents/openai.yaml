@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rationale · ADR 검토"
+  short_description: "기존 ADR의 근거와 대안 비교, 재검토 조건을 확인"
+  default_prompt: "$rationale-review 이 ADR의 선택 근거와 재검토 조건을 검토해줘."

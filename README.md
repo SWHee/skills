@@ -19,6 +19,14 @@ Codex App을 중심으로 관리하는 개인용 AI 에이전트 스킬 아카�
 각 폴더의 `README.md`에는 사람을 위한 사용 안내와 예시가, `SKILL.md`에는 에이전트가
 따르는 실행 계약이 있습니다.
 
+## Plugins
+
+| Plugin | What it does | Skills |
+| --- | --- | --- |
+| [Rationale](./rationale/README.md) | 비용·설계·연쇄 영향을 조사해 기술 결정을 돕고 개인 ADR 작성·검토 연결 | `rationale`, `rationale-write`, `rationale-review` |
+
+플러그인은 관련 스킬을 하나로 묶습니다. 설치와 개발용 실행 방법은 해당 플러그인의 README를 따릅니다.
+
 ## Install
 
 저장소를 받은 뒤 원하는 스킬 폴더를 Codex에 심볼릭 링크로 연결합니다.
