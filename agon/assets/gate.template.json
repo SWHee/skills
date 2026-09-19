@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "event": {
+    "name": "REPLACE_WITH_EVENT",
+    "track": "REPLACE_WITH_TRACK",
+    "award": "REPLACE_WITH_AWARD",
+    "coding_start": "2099-01-01T09:00:00+09:00",
+    "deadline": "2099-01-02T18:00:00+09:00"
+  },
+  "sources": [
+    {
+      "id": "official-rules",
+      "uri": "REPLACE_WITH_ORIGINAL_URL_OR_PATH",
+      "retrieved_at": "2098-12-31T12:00:00+09:00",
+      "authority": "official",
+      "snapshot": "sources/official-rules.txt"
+    }
+  ],
+  "rules": [
+    {"id": "eligibility", "topic": "eligibility", "status": "unknown", "source_ids": [], "locator": "", "resolution": ""},
+    {"id": "team", "topic": "team", "status": "unknown", "source_ids": [], "locator": "", "resolution": ""},
+    {"id": "work-window", "topic": "work_window", "status": "unknown", "source_ids": [], "locator": "", "resolution": ""},
+    {"id": "reuse", "topic": "reuse", "status": "unknown", "source_ids": [], "locator": "", "resolution": ""},
+    {"id": "ai-usage", "topic": "ai_usage", "status": "unknown", "source_ids": [], "locator": "", "resolution": ""},
+    {"id": "required-tech", "topic": "required_tech", "status": "unknown", "source_ids": [], "locator": "", "resolution": ""},
+    {"id": "data-rights", "topic": "data_rights", "status": "unknown", "source_ids": [], "locator": "", "resolution": ""},
+    {"id": "ip-licensing", "topic": "ip_licensing", "status": "unknown", "source_ids": [], "locator": "", "resolution": ""},
+    {"id": "submission", "topic": "submission", "status": "unknown", "source_ids": [], "locator": "", "resolution": ""},
+    {"id": "judging", "topic": "judging", "status": "unknown", "source_ids": [], "locator": "", "resolution": ""},
+    {"id": "demo-environment", "topic": "demo_environment", "status": "unknown", "source_ids": [], "locator": "", "resolution": ""}
+  ],
+  "rubric": {
+    "award": "REPLACE_WITH_AWARD",
+    "weighting": "unpublished",
+    "criteria": [
+      {
+        "id": "replace-criterion",
+        "name": "REPLACE_WITH_OFFICIAL_CRITERION",
+        "source_id": "official-rules",
+        "locator": "REPLACE_WITH_SECTION_OR_FIELD",
+        "weight": null,
+        "feature": "REPLACE_WITH_PLANNED_FEATURE",
+        "proof": "REPLACE_WITH_OBSERVABLE_PROOF"
+      }
+    ]
+  },
+  "artifacts": {"brief": "brief.md"},
+  "budget": {"implementation_minutes": 1, "verification_minutes": 1, "submission_minutes": 1},
+  "review": {"verdict": "pending", "reviewer": "", "reviewed_at": "", "fingerprint": "", "rationale": ""}
+}
