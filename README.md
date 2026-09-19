@@ -13,7 +13,7 @@ Codex App을 중심으로 관리하는 개인용 AI 에이전트 스킬 아카�
 | Skill | What it does | Runtime |
 | --- | --- | --- |
 | [Atelier](./atelier/README.md) | 역할·비용·위험에 따라 Codex와 Claude 모델을 조율하는 소프트웨어 작업실 | Codex App + Claude Code CLI |
-| [Falsify](./falsify/README.md) | 주장·계획·결과물을 가장 강한 반례로 검증하는 적대적 검토 모드 | Codex App · Claude Code CLI |
+| [Falsify](./falsify/README.md) | 의견·의문·계획의 전제를 검증하고 판단과 핵심 근거만 읽기 쉽게 전달 | Codex App · Claude Code CLI |
 | [Agon](./agon/README.md) | AI 해커톤의 규칙·문제·증거를 구현 전에 확정하고 실행하는 참가 스킬 | Codex App · Claude Code CLI |
 
 각 폴더의 `README.md`에는 사람을 위한 사용 안내와 예시가, `SKILL.md`에는 에이전트가

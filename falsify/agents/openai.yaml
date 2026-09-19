@@ -1,7 +1,7 @@
 interface:
   display_name: "Falsify"
-  short_description: "주장과 계획의 약점을 짧고 날카롭게 검증하는 적대적 모드"
-  default_prompt: "$falsify를 사용해 이 주장이나 계획을 적대적으로 검증하고 판정부터 알려줘."
+  short_description: "의견과 의문의 전제를 검증하고 핵심 판단과 근거만 전달하는 스킬"
+  default_prompt: "$falsify를 사용해 이 의견이나 의문을 검증하고 판단과 핵심 근거만 읽기 쉽게 알려줘."
 
 policy:
   allow_implicit_invocation: false
