@@ -33,6 +33,8 @@ Parent checks status and diff against the pre-task baseline, including untracked
 
 External reviewer context must be fresh and contain the spec, current diff, and verification evidence. It can read relevant surrounding code, but should not inherit the implementer's narrative. `ship` is not permission to deploy; it means the supplied acceptance conditions have no known blocker.
 
+Review the accumulated task changes against the pre-task baseline, not merely the last writer's diff. Include new files and distinguish pre-existing user edits. After repair, supply the cumulative result and the previous findings with their disposition so fixed defects and regressions can both be assessed. A parent who planned the change offers separate judgment from the writer, but not fresh-context review; describe that distinction accurately.
+
 An explicitly selected verifier may analyze tests and evidence. Mechanical commands remain under parent control for read-only Claude roles; give them outputs rather than unrestricted shell access.
 
 ## Repairs

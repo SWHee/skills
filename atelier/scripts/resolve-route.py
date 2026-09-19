@@ -62,11 +62,14 @@ def resolve(config, overrides):
         if type(values[key]) is not int or not low <= values[key] <= upper:
             raise ValueError(f"{key} must be an integer from {low} to {upper}")
     roles = {role: selection(values[role], role) for role in ROLES}
-    if values["mode"] == "solo" and any(r["source"] == "model" for r in roles.values()):
+    active = {"plan": ("architect",), "review": ("verifier", "reviewer"),
+              "run": ROLES}[values["phase"]]
+    if values["mode"] == "solo" and any(roles[r]["source"] == "model" for r in active):
         raise ValueError("solo conflicts with explicit delegated model selections; use parent or auto")
     if values["mode"] == "cross" and roles["reviewer"]["source"] == "off":
         raise ValueError("cross requires independent review; reviewer cannot be off")
     return {"mode": values["mode"], "phase": values["phase"], "roles": roles,
+            "active_roles": list(active),
             "limits": {k: values[k] for k in ("max_calls", "max_repairs", "timeout")},
             "status": "requested", "availability_checked": False}
 
@@ -75,17 +78,23 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, allow_abbrev=False)
     parser.add_argument("--config", type=Path, help="Explicit JSON config; otherwise use workdir/.atelier.json if present")
     parser.add_argument("--workdir", type=Path, default=Path.cwd())
+    parser.add_argument("--dry-run", action="store_true", help="Preview only; this resolver never invokes models")
     for key in DEFAULTS:
-        parser.add_argument("--" + key.replace("_", "-"), type=int if isinstance(DEFAULTS[key], int) else str)
+        flags = ["--" + key.replace("_", "-")]
+        if key == "architect":
+            flags.append("--planner")
+        parser.add_argument(*flags, type=int if isinstance(DEFAULTS[key], int) else str)
     args = vars(parser.parse_args())
     explicit = args.pop("config")
     workdir = args.pop("workdir")
+    dry_run = args.pop("dry_run")
     if not workdir.is_dir():
         parser.error(f"workdir is not a directory: {workdir}")
     path = explicit if explicit is not None else workdir / ".atelier.json"
     try:
         config = json.loads(path.read_text()) if explicit is not None or path.exists() else {}
         result = resolve(config, args)
+        result["dry_run"] = dry_run
     except (ValueError, OSError) as exc:
         parser.error(str(exc))
     print(json.dumps(result, ensure_ascii=False, indent=2))

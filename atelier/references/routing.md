@@ -27,6 +27,8 @@ python3 <skill-root>/scripts/resolve-route.py --workdir /absolute/repo \
 
 This prints a request object and overrides just the implementer and phase. `status=requested` and `availability_checked=false` are intentional: a config parser cannot establish account access or start an agent.
 
+`--planner` and `--architect` share one CLI value (last occurrence wins); JSON uses `architect` only. `--dry-run` is invocation-only, not a persisted default. It previews the route without preflight or design work. `active_roles` excludes writers in plan/review; inactive saved selections remain visible but do not conflict with `solo` for that phase.
+
 ## Model resolution
 
 - `astra`, `sol`, `terra`, `luna`, and `gpt-*` infer Codex; Claude family aliases and `claude-*` infer Claude. Custom names require `codex:` or `claude:`.
@@ -56,5 +58,9 @@ Do not automatically require the strongest implementation model merely because a
 Independent cross-provider review helps when correlated errors matter; it also adds context and latency. Prefer it for consequential unfamiliar changes or when explicitly requested. For small delegated fixes, parent review may suffice.
 
 Before calling a model, consider input context + expected output + repeated initialization + likely repairs. Subscription usage is not interchangeable with API list pricing. Report observed usage when available; otherwise state the decision is qualitative.
+
+Use a routine lane for spec-determined changes with strong checks (for example an available Luna or Haiku); use a more capable lane when the implementation still requires reasoning the spec cannot settle. These are candidates, not a price ranking or account-access guarantee. A mixed workload can use different auto-selected implementations per task. A pinned implementer stays pinned; return unresolved decisions to the architect instead of silently escalating.
+
+Budget the actual path: an external architect + writer + external reviewer costs at least three calls; each repair followed by external re-review needs two more. A parent architect/reviewer with one writer starts at one call. Reserve the selected review before dispatching writers, and reserve re-review before dispatching a repair. The repair ceiling does not guarantee every cycle fits the call limit. Keep a small in-context ledger of role, requested/observed model, status, and calls remaining; files are unnecessary unless continuation requires them.
 
 On limit exhaustion, report completed work, remaining findings, and the smallest continuation. Do not reset counters by spawning another orchestrator.

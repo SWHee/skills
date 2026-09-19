@@ -25,7 +25,21 @@ request → architect → implementer → parent verification → reviewer → s
 
 ## Quick start
 
-현재 모델이 Astra라면 아래 세 조합이 가장 실용적인 출발점입니다.
+옵션 없이 시작하거나, 구현 모델 하나만 지정해도 됩니다. 다섯 역할은 책임 구분이며
+다섯 모델을 매번 호출한다는 뜻은 아닙니다. 검증은 보통 현재 Codex가 도구로 수행하고,
+수정 반영은 리뷰에서 문제가 발견될 때만 진행합니다.
+
+```text
+$atelier 로그인 오류를 수정하고 검증해줘.
+$atelier --implementer luna/medium 이 명세대로 구현해줘.
+$atelier --dry-run --planner parent --implementer claude:haiku --reviewer sol/high
+$atelier --help
+```
+
+`--dry-run`은 모델 호출·인증 확인·파일 변경 없이 설정만 보여줍니다. 설계 결과가 필요하면
+`--phase plan`을 사용하세요. `--planner`는 `--architect`의 별칭입니다.
+
+현재 모델이 Astra라면 다음처럼 역할을 조합할 수 있습니다.
 
 ```text
 # 작고 명확한 변경: Astra가 직접 처리
@@ -102,6 +116,11 @@ python3 atelier/scripts/resolve-route.py --workdir /absolute/path/to/project
 ## Claude lane
 
 Claude 역할을 선택하면 로컬 Claude Code CLI와 Python 3가 필요합니다.
+
+Codex 앱의 현재 모델을 Anthropic 모델로 바꾸는 방식이 아닙니다. Codex가 로컬 Claude
+Code 프로세스에 명세를 전달하고 결과와 변경 파일을 회수합니다. OpenAI 역할은 사용 가능한
+네이티브 하위 에이전트를 이용합니다. 모델 이름을 지정해도 구독의 사용 권한이 추가되지는
+않으며, 사용량과 제한은 실제 호출에 사용된 각 도구의 계정·인증 설정에 따릅니다.
 
 ```bash
 atelier/scripts/claude-lane.sh --check

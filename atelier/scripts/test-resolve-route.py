@@ -58,6 +58,27 @@ class RouteTests(unittest.TestCase):
                                   text=True, capture_output=True)
             self.assertNotEqual(proc.returncode, 0)
 
+    def test_inactive_writer_does_not_block_solo_readonly_phase(self):
+        for phase in ("plan", "review"):
+            result = route.resolve({"implementer": "sol/medium", "repairer": "terra/high"},
+                                   {"phase": phase, "mode": "solo"})
+            self.assertNotIn("implementer", result["active_roles"])
+        with self.assertRaises(ValueError):
+            route.resolve({"architect": "sol"}, {"phase": "plan", "mode": "solo"})
+
+    def test_planner_alias_last_value_and_preview(self):
+        with tempfile.TemporaryDirectory() as directory:
+            for options, expected in ((["--architect", "sol", "--planner", "terra"], "terra"),
+                                      (["--planner", "terra", "--architect", "sol"], "sol")):
+                proc = subprocess.run([sys.executable, str(SCRIPT), "--workdir", directory,
+                                       "--dry-run", *options], text=True, capture_output=True)
+                self.assertEqual(proc.returncode, 0, proc.stderr)
+                result = json.loads(proc.stdout)
+                self.assertTrue(result["dry_run"])
+                self.assertFalse(result["availability_checked"])
+                self.assertEqual(result["roles"]["architect"]["model"], expected)
+                self.assertEqual(list(Path(directory).iterdir()), [])
+
     def test_unknown_short_option_and_missing_workdir_fail(self):
         with tempfile.TemporaryDirectory() as directory:
             for options in (["--impl", "sol"], ["--workdir", directory + "/missing"]):
