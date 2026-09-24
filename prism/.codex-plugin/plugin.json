@@ -1,0 +1,18 @@
+{
+  "name": "prism",
+  "version": "0.1.0",
+  "description": "Codex에서 Claude Code로 일반·적대적 읽기 전용 코드 검토 실행",
+  "author": {
+    "name": "skills-harry"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Prism · Claude 코드 리뷰",
+    "shortDescription": "Claude의 독립적인 일반·적대적 코드 검토",
+    "longDescription": "로컬 Claude Code CLI로 변경 사항을 검토하고 근거와 위치가 포함된 결과를 전달합니다. 자동 수정이나 반복 검토는 하지 않습니다.",
+    "developerName": "skills-harry",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "$prism 현재 변경을 적대적으로 검토해줘."
+  }
+}

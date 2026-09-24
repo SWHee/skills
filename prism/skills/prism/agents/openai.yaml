@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prism · Claude 코드 리뷰"
+  short_description: "Claude의 읽기 전용 일반·적대적 검토를 받고 결과만 전달"
+  default_prompt: "$prism 현재 변경을 Claude로 적대적으로 검토해줘."
