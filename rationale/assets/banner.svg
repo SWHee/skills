@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="340" viewBox="0 0 960 340" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">rationale — every choice has a reason</title>
+  <desc id="desc">A centered rationale emblem on a softly illuminated dark background.</desc>
+  <defs>
+    <radialGradient id="halo"><stop stop-color="#9dbbb9" stop-opacity=".22"/><stop offset="1" stop-color="#9dbbb9" stop-opacity="0"/></radialGradient>
+    <linearGradient id="base" x2="1" y2="1"><stop stop-color="#211e20"/><stop offset=".55" stop-color="#17191d"/><stop offset="1" stop-color="#23272b"/></linearGradient>
+    <linearGradient id="glass" x2="1" y2="1"><stop stop-color="#9dbbb9" stop-opacity=".32"/><stop offset="1" stop-color="#cfbd94" stop-opacity=".08"/></linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" stroke="#fff" stroke-opacity=".025"/></pattern>
+  </defs>
+  <rect width="960" height="340" rx="20" fill="url(#base)"/>
+  <rect width="960" height="340" rx="20" fill="url(#grid)"/>
+  <ellipse cx="480" cy="164" rx="290" ry="215" fill="url(#halo)"/>
+  <rect x="16.5" y="16.5" width="927" height="307" rx="12" stroke="#9dbbb9" stroke-opacity=".16"/>
+  <path d="M48 64V48h16m832 0h16v16M48 276v16h16m832 0h16v-16" stroke="#9dbbb9" stroke-opacity=".4"/>
+  <path d="M280 167h70m260 0h70" stroke="#9dbbb9" stroke-opacity=".2"/>
+  <g stroke="#cfbd94"><path d="M426 102h85l24 24v112H426Z" fill="url(#glass)" stroke="#c5dad0" stroke-width="2" stroke-linejoin="round"/><path d="M511 102v24h24m-86 24h40m-40 17h63" fill="none" stroke="#c5dad0" stroke-width="2"/><circle cx="451" cy="202" r="5" fill="#cfbd94"/><circle cx="510" cy="202" r="5" fill="#cfbd94"/><path d="M456 202h49m-26-20v20" stroke="#cfbd94" stroke-width="2"/><circle cx="479" cy="181" r="4" fill="#e9dfc6"/></g>
+  <text x="480" y="287" text-anchor="middle" fill="#9dbbb9" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" letter-spacing="3">EVERY CHOICE HAS A REASON</text>
+</svg>

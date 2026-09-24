@@ -1,8 +1,10 @@
 <div align="center">
 
-![Prism — A second perspective.](assets/banner.svg)
+<img src="assets/banner.svg" alt="Prism — 하나의 빛을 다른 관점으로 나누는 프리즘" width="760">
 
-**구현은 Codex에서. 다른 시선은 Claude에게.**
+# Prism
+
+### 구현은 Codex에서. 다른 시선은 Claude에게.
 
 읽기 전용 코드 리뷰 · Opus 5.5 · 추가 Python 패키지 없음
 
@@ -90,4 +92,4 @@ python3 -m unittest discover -s prism/tests -v
 [OpenAI의 Codex plugin for Claude Code](https://github.com/openai/codex-plugin-cc)에서 영감을 받아,
 Codex가 Claude의 검토를 받는 방향으로 직접 구현했습니다.
 Prism은 OpenAI 또는 Anthropic의 공식 제품이 아닙니다.
-Claude와 Codex 명칭은 각 소유자의 상표이며, 배너의 픽셀 캐릭터와 프리즘은 이 프로젝트를 위해 제작한 독자적인 그래픽입니다.
+Claude와 Codex 명칭은 각 소유자의 상표이며, 배너는 공식 로고가 아닌 이 프로젝트의 독자적인 프리즘 그래픽입니다.

@@ -1,30 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="480" viewBox="0 0 1280 480" role="img" aria-labelledby="title desc">
-  <title id="title">Prism — A second perspective.</title>
-  <desc id="desc">Warm terracotta light, a geometric prism and an original pixel companion. Claude-powered code review for Codex.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="340" viewBox="0 0 960 340" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">prism — a second perspective</title>
+  <desc id="desc">A centered prism emblem on a softly illuminated dark background.</desc>
   <defs>
-    <radialGradient id="glow" cx="16%" cy="0%" r="110%">
-      <stop stop-color="#b57055"/><stop offset=".5" stop-color="#382b29"/><stop offset="1" stop-color="#201e20"/>
-    </radialGradient>
-    <linearGradient id="beam"><stop stop-color="#e6ba98" stop-opacity=".1"/><stop offset="1" stop-color="#edbc99"/></linearGradient>
-    <linearGradient id="glass" x2="1" y2="1"><stop stop-color="#f2c7a6" stop-opacity=".23"/><stop offset="1" stop-color="#d87858" stop-opacity=".04"/></linearGradient>
+    <radialGradient id="halo"><stop stop-color="#df977c" stop-opacity=".22"/><stop offset="1" stop-color="#df977c" stop-opacity="0"/></radialGradient>
+    <linearGradient id="base" x2="1" y2="1"><stop stop-color="#211e20"/><stop offset=".55" stop-color="#17191d"/><stop offset="1" stop-color="#23272b"/></linearGradient>
+    <linearGradient id="glass" x2="1" y2="1"><stop stop-color="#df977c" stop-opacity=".32"/><stop offset="1" stop-color="#acb6e8" stop-opacity=".08"/></linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" stroke="#fff" stroke-opacity=".025"/></pattern>
   </defs>
-  <rect width="1280" height="480" rx="24" fill="url(#glow)"/>
-  <rect x="24" y="24" width="1232" height="432" rx="14" fill="none" stroke="#e5b69d" stroke-opacity=".18"/>
-  <g fill="#e8c3ae" font-family="Arial, Helvetica, sans-serif" font-size="13" letter-spacing="3">
-    <text x="72" y="77">CODEX × CLAUDE</text>
-    <text x="72" y="412">INDEPENDENT PERSPECTIVE. GROUNDED FINDINGS.</text>
-  </g>
-  <text x="68" y="226" fill="#fff5e9" font-family="Georgia, serif" font-size="114" letter-spacing="-4">Prism</text>
-  <text x="74" y="279" fill="#f0c5af" font-family="Arial, Helvetica, sans-serif" font-size="26">A second perspective.</text>
-  <text x="74" y="321" fill="#c0aaa0" font-family="Arial, Helvetica, sans-serif" font-size="17">Claude-powered code review, inside Codex.</text>
-  <path d="M630 258H843" stroke="url(#beam)" stroke-width="3"/>
-  <path d="M880 134L771 330H989Z" fill="url(#glass)" stroke="#f0c5a7" stroke-width="2"/>
-  <path d="M880 134L880 302L771 330M880 302L989 330" fill="none" stroke="#ecc6b0" stroke-opacity=".3"/>
-  <path d="M922 245L1188 191" stroke="#e69073" stroke-width="3"/>
-  <path d="M931 258H1188" stroke="#f0c6a0" stroke-width="3"/>
-  <path d="M938 272L1188 323" stroke="#a6b9ad" stroke-width="3"/>
-  <g transform="translate(1050 72)" fill="#d98668">
-    <path d="M12 0H60V12H72V48H60V60H48V48H24V60H12V48H0V12H12Z"/>
-    <path d="M19 18H25V30H19ZM47 18H53V30H47Z" fill="#2a2423"/>
-  </g>
+  <rect width="960" height="340" rx="20" fill="url(#base)"/>
+  <rect width="960" height="340" rx="20" fill="url(#grid)"/>
+  <ellipse cx="480" cy="164" rx="290" ry="215" fill="url(#halo)"/>
+  <rect x="16.5" y="16.5" width="927" height="307" rx="12" stroke="#df977c" stroke-opacity=".16"/>
+  <path d="M48 64V48h16m832 0h16v16M48 276v16h16m832 0h16v-16" stroke="#df977c" stroke-opacity=".4"/>
+  <path d="M280 167h70m260 0h70" stroke="#df977c" stroke-opacity=".2"/>
+  <g stroke="#acb6e8"><path d="M480 87 565 237H395Z" fill="url(#glass)" stroke="#f4cbbb" stroke-width="2"/><path d="m480 87 0 150m-85 0 85-54 85 54" fill="none" stroke="#f4cbbb" stroke-opacity=".4"/><path d="m340 172 108 0" stroke="#fff0df" stroke-width="3"/><path d="m505 172 115-26m-115 30 115 0m-115 4 115 26" stroke-linecap="round" fill="none" stroke-width="3"/><circle cx="480" cy="183" r="5" fill="#fff0df"/></g>
+  <text x="480" y="287" text-anchor="middle" fill="#df977c" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" letter-spacing="3">A SECOND PERSPECTIVE</text>
 </svg>

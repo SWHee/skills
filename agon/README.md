@@ -1,10 +1,14 @@
 <div align="center">
 
+<img src="assets/banner.svg" alt="Agon — 증명 가능한 결과를 향한 출발점" width="760">
+
 # Agon
 
-### 무엇을 만들지 결정하기 전에, 무엇을 증명해야 하는지 확정한다.
+### 만들기 전에, 증명할 것을 정한다.
 
 AI 해커톤의 규칙, 문제 근거, 심사 기준, AI 실현 가능성, 제출 계획을 하나의 실행 계약으로 묶는 스킬입니다.
+
+[Quick start](#quick-start) · [Readiness](#readiness) · [Gate](#gate-walkthrough) · [Evaluation](#evaluation-and-packaging)
 
 </div>
 
@@ -40,6 +44,9 @@ Codex에서는 `$agon`을 사용합니다. Claude Code 같은 대화형 런타�
 
 ## Gate walkthrough
 
+<details>
+<summary>준비 계약 파일과 로컬 gate 사용법</summary>
+
 프로젝트에서는 기본적으로 `hackathon/agon/`에 파일을 둡니다. 기존에 같은 역할을 하는 문서가 있다면 재사용합니다.
 
 ```bash
@@ -62,6 +69,8 @@ python3 <skill-root>/scripts/gate.py check hackathon/agon/gate.json
 
 종료 코드는 `ready=0`, 구조는 유효하지만 차단됨=`1`, JSON·스키마·경로·CLI 오류=`2`입니다. `--now ISO8601`은 결정적 테스트 전용입니다. 필수 파일을 채운 pending 템플릿에도 fingerprint를 만들 수 있으므로 그 자체가 구현 승인은 아닙니다. 자세한 필드는 [gate-format.md](./references/gate-format.md)에 있습니다.
 
+</details>
+
 ## Evaluation and packaging
 
 개발용 사례와 hold-out을 분리하고, 실패·적대 입력을 포함한 대표 사례에서 비AI 기준선과 비교합니다. 전체 분모, 환경, 모델/프롬프트/데이터 버전, 재시도, 지연, 비용, 한계를 기록합니다. 녹화·mock·계획 상태를 실제 동작처럼 쓰지 않습니다.
@@ -70,11 +79,18 @@ python3 <skill-root>/scripts/gate.py check hackathon/agon/gate.json
 
 ## Development
 
+<details>
+<summary>로컬 검사와 행동 회귀 사례</summary>
+
 ```bash
 python3 agon/tests/test_gate.py
 python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py agon
 ```
 
 [행동 회귀 사례](./tests/behavioral.md)는 준비되지 않은 구현 압력, 규칙 변경, 코딩 시작 전 계획, 준비 완료 후 중복 승인 방지를 점검합니다. 원격 최신성이나 법률 검토는 로컬 테스트 범위가 아닙니다.
+
+</details>
+
+## Credits
 
 Agon은 [rignore/skills의 ai-hackathon-runner](https://github.com/rignore/skills/tree/main/ai-hackathon-runner)를 조사 참고자료로 검토했습니다. 문구와 구현은 이 저장소의 요구에 맞게 새로 작성했습니다.

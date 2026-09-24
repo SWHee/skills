@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="340" viewBox="0 0 960 340" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">atelier — thoughtfully orchestrated</title>
+  <desc id="desc">A centered atelier emblem on a softly illuminated dark background.</desc>
+  <defs>
+    <radialGradient id="halo"><stop stop-color="#caa984" stop-opacity=".22"/><stop offset="1" stop-color="#caa984" stop-opacity="0"/></radialGradient>
+    <linearGradient id="base" x2="1" y2="1"><stop stop-color="#211e20"/><stop offset=".55" stop-color="#17191d"/><stop offset="1" stop-color="#23272b"/></linearGradient>
+    <linearGradient id="glass" x2="1" y2="1"><stop stop-color="#caa984" stop-opacity=".32"/><stop offset="1" stop-color="#a3bda8" stop-opacity=".08"/></linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" stroke="#fff" stroke-opacity=".025"/></pattern>
+  </defs>
+  <rect width="960" height="340" rx="20" fill="url(#base)"/>
+  <rect width="960" height="340" rx="20" fill="url(#grid)"/>
+  <ellipse cx="480" cy="164" rx="290" ry="215" fill="url(#halo)"/>
+  <rect x="16.5" y="16.5" width="927" height="307" rx="12" stroke="#caa984" stroke-opacity=".16"/>
+  <path d="M48 64V48h16m832 0h16v16M48 276v16h16m832 0h16v-16" stroke="#caa984" stroke-opacity=".4"/>
+  <path d="M280 167h70m260 0h70" stroke="#caa984" stroke-opacity=".2"/>
+  <g stroke="#a3bda8"><rect x="410" y="110" width="88" height="112" rx="12" transform="rotate(-12 454 166)" fill="#1b2422" stroke="#a3bda8" stroke-width="2"/><rect x="455" y="100" width="88" height="112" rx="12" transform="rotate(12 499 156)" fill="url(#glass)" stroke="#e0c19e" stroke-width="2"/><path d="m476 144 14-10 16 16-14 10m-25 10 30 7m-34 10 20 5" fill="none" stroke="#f5debe" stroke-width="3" stroke-linecap="round"/><circle cx="411" cy="234" r="5" fill="#caa984"/><path d="M428 234h118" stroke="#caa984" stroke-opacity=".4"/></g>
+  <text x="480" y="287" text-anchor="middle" fill="#caa984" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" letter-spacing="3">THOUGHTFULLY ORCHESTRATED</text>
+</svg>

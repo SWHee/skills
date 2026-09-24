@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/banner.svg" alt="Falsify — 생각의 전제를 확인하는 독립적인 시선" width="760">
+
 # Falsify
 
 ### 이 생각은 반례를 견딜까?
@@ -84,9 +86,14 @@ Codex의 명시적 호출 정책은 [agents/openai.yaml](./agents/openai.yaml)�
 
 ## Development
 
+<details>
+<summary>행동 회귀 사례와 구조 검사</summary>
+
 [행동 회귀 사례](./tests/behavioral.md)는 옵션, 근거 수준, 재검증, 범위 제어를 점검합니다.
 구조 검사는 다음 명령으로 실행합니다.
 
 ```bash
 python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py falsify
 ```
+
+</details>

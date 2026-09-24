@@ -1,10 +1,21 @@
+<div align="center">
+
+<img src="assets/banner.svg" alt="Rationale — 선택과 근거를 연결하는 결정 기록" width="760">
+
 # Rationale
 
-선택의 근거를 뜻하는 이름입니다. 기본 호출은 `$rationale`이며 역할을 함께 표시해 이름을 외우지 않아도 구분하도록 구성했습니다.
+### 선택에는 근거를. 결정에는 기록을.
 
-기술의 비용·설계·운영·연쇄 변경을 먼저 조사해 선택을 돕는 Codex 플러그인입니다. 결정 지원만 받거나, 개인 ADR 작성까지 이어갈 수 있습니다. 별도 서버·API 키·추가 모델 없이 호스트의 대화, 검색, 파일 도구를 사용합니다.
+기술의 비용·설계·운영 영향을 비교하고, 필요한 경우 ADR로 남기는 Codex 플러그인입니다.
 
-## 들어 있는 스킬
+결정 지원 · ADR 작성 · ADR 검토 · 별도 모델 호출 없음
+
+[사용법](#사용법) · [진행 방식](#요청에-따른-진행) · [템플릿](#개인용-템플릿) · [설치](#설치와-호출)
+
+</div>
+
+## 사용법
+
 
 | 스킬 | 용도 |
 | --- | --- |
@@ -46,17 +57,8 @@ $rationale-review docs/decisions/0001-notification.md의 근거와 재검토 조
 
 ## 설치와 호출
 
-이 폴더는 세 스킬을 담은 플러그인 소스입니다. 현재 개인 환경에서는 Atelier·Falsify·Agon과 같은 방식으로 `~/.codex/skills`에서 각 스킬 폴더를 심볼릭 링크해 사용합니다. 플러그인 마켓플레이스 등록과는 별개이며 소스 변경이 링크를 통해 바로 반영됩니다.
-
-```text
-$rationale 알림 통신 방식을 비교하고 개인 ADR로 남겨줘.
-$rationale-write 이미 선택한 기술의 이유를 ADR로 정리해줘.
-$rationale-review docs/decisions/0001-notification.md를 검토해줘.
-```
-
-새 작업에서 스킬 선택기에 `rationale`, `rationale-write`, `rationale-review`가 표시되는지 확인합니다. `/rationale`, `/rationale-write`, `/rationale-review`라는 대화 표현도 같은 요청으로 해석하지만 앱의 슬래시 명령을 등록하지는 않습니다.
-
-다른 환경에서도 저장소 루트에서 다음처럼 연결할 수 있습니다. 같은 이름의 파일이나 링크가 있으면 먼저 확인하며 덮어쓰지 않습니다.
+별도 서버·API 키·추가 모델 없이 호스트의 대화·검색·파일 도구를 사용합니다.
+저장소 루트에서 세 스킬을 연결하세요. 같은 이름의 파일이나 링크가 있으면 덮어쓰지 말고 먼저 확인합니다.
 
 ```bash
 mkdir -p ~/.codex/skills
@@ -65,9 +67,13 @@ ln -s "$PWD/rationale/skills/rationale-write" ~/.codex/skills/rationale-write
 ln -s "$PWD/rationale/skills/rationale-review" ~/.codex/skills/rationale-review
 ```
 
-플러그인 자체의 배포 구조는 `.codex-plugin/plugin.json`에 유지합니다. 나중에 마켓플레이스 설치로 전환할 때는 같은 스킬을 두 경로에서 중복 설치하지 않도록 기존 개인 링크를 확인합니다.
+새 작업의 스킬 선택기에서 세 이름을 확인합니다. 이 명령은 개인 스킬 연결 방식이며,
+플러그인 설치로 전환할 때는 기존 링크와 중복 설치하지 않습니다.
 
 ## 검증
+
+<details>
+<summary>세 스킬과 플러그인의 로컬 구조 검사</summary>
 
 Codex의 기본 제작 스킬이 설치된 환경에서 저장소 루트 기준으로 실행합니다.
 
@@ -79,3 +85,5 @@ python3 ~/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py ration
 ```
 
 구조 검사와 판단 품질은 다릅니다. [행동 평가 사례](tests/behavioral.md)와 [이번 검증 기록](tests/validation.md)을 함께 확인합니다. [템플릿 출처·변경 사항](TEMPLATE-NOTES.md)도 포함합니다.
+
+</details>

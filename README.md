@@ -25,6 +25,7 @@ Codex App을 중심으로 관리하는 개인용 AI 에이전트 스킬 아카�
 | --- | --- | --- |
 | [Prism](./prism/README.md) | Codex에서 Claude의 읽기 전용 일반·적대적 검토를 받고 결과 전달 | `prism` |
 | [Rationale](./rationale/README.md) | 비용·설계·연쇄 영향을 조사해 기술 결정을 돕고 개인 ADR 작성·검토 연결 | `rationale`, `rationale-write`, `rationale-review` |
+| [Team Start](./team-start/README.md) | 새 팀 프로젝트의 GitHub 저장소·권한·보드·협업 안내 준비와 초기 설정 재개 | `team-start` |
 
 플러그인은 관련 스킬을 하나로 묶습니다. 설치와 개발용 실행 방법은 해당 플러그인의 README를 따릅니다.
 

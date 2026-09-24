@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="340" viewBox="0 0 960 340" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">team-start — a good place to begin</title>
+  <desc id="desc">A centered team-start emblem on a softly illuminated dark background.</desc>
+  <defs>
+    <radialGradient id="halo"><stop stop-color="#a8bfce" stop-opacity=".22"/><stop offset="1" stop-color="#a8bfce" stop-opacity="0"/></radialGradient>
+    <linearGradient id="base" x2="1" y2="1"><stop stop-color="#211e20"/><stop offset=".55" stop-color="#17191d"/><stop offset="1" stop-color="#23272b"/></linearGradient>
+    <linearGradient id="glass" x2="1" y2="1"><stop stop-color="#a8bfce" stop-opacity=".32"/><stop offset="1" stop-color="#b6c49b" stop-opacity=".08"/></linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" stroke="#fff" stroke-opacity=".025"/></pattern>
+  </defs>
+  <rect width="960" height="340" rx="20" fill="url(#base)"/>
+  <rect width="960" height="340" rx="20" fill="url(#grid)"/>
+  <ellipse cx="480" cy="164" rx="290" ry="215" fill="url(#halo)"/>
+  <rect x="16.5" y="16.5" width="927" height="307" rx="12" stroke="#a8bfce" stroke-opacity=".16"/>
+  <path d="M48 64V48h16m832 0h16v16M48 276v16h16m832 0h16v-16" stroke="#a8bfce" stroke-opacity=".4"/>
+  <path d="M280 167h70m260 0h70" stroke="#a8bfce" stroke-opacity=".2"/>
+  <g stroke="#b6c49b"><circle cx="480" cy="135" r="26" fill="url(#glass)" stroke="#d0e0e5" stroke-width="2"/><circle cx="424" cy="197" r="22" fill="url(#glass)" stroke="#b6c49b" stroke-width="2"/><circle cx="536" cy="197" r="22" fill="url(#glass)" stroke="#b6c49b" stroke-width="2"/><path d="m463 155-24 25m58-25 24 25m-74 17h66" fill="none" stroke="#c4d5d8" stroke-width="2"/><path d="m472 135 6 6 12-13" fill="none" stroke="#ecf4e7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M395 244h170" stroke="#a8bfce" stroke-opacity=".3"/></g>
+  <text x="480" y="287" text-anchor="middle" fill="#a8bfce" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" letter-spacing="3">A GOOD PLACE TO BEGIN</text>
+</svg>

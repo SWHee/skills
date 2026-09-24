@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/banner.svg" alt="Atelier — 역할에 맞는 모델을 조율하는 작업실" width="760">
+
 # Atelier
 
 ### 한 작업을, 역할에 맞는 모델에게.
@@ -89,6 +91,9 @@ $atelier --architect codex:terra/high --implementer claude:sonnet/medium --revie
 
 ## Configuration
 
+<details>
+<summary>프로젝트별 기본 모델과 실행 한도 설정</summary>
+
 프로젝트 루트에 `.atelier.json`을 두면 기본 조합을 반복해서 쓰지 않아도 됩니다.
 
 ```json
@@ -112,6 +117,8 @@ python3 atelier/scripts/resolve-route.py --workdir /absolute/path/to/project
 ```
 
 자세한 모델 해석과 비용 판단은 [routing.md](./references/routing.md)를 확인하세요.
+
+</details>
 
 ## Claude lane
 
@@ -140,6 +147,9 @@ JSON 결과·모델 증거·타임아웃을 확인한 뒤 결과를 게시합니
 
 ## Development
 
+<details>
+<summary>로컬 구조 검사와 모델 호출 없는 회귀 테스트</summary>
+
 ```bash
 python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py atelier
 python3 atelier/scripts/test-resolve-route.py
@@ -148,3 +158,5 @@ atelier/scripts/test-claude-lane.sh
 
 브리지는 가짜 Claude CLI로 인증, 권한, 모델 불일치, 잘못된 JSON, 타임아웃, 결과 보존을
 검증합니다. 이 테스트는 실제 모델 호출을 만들지 않습니다.
+
+</details>
