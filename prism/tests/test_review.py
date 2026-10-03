@@ -20,6 +20,18 @@ spec.loader.exec_module(review)
 
 
 class ReviewTests(unittest.TestCase):
+    def test_auth_check_handles_unavailable_credentials_without_model_calls(self):
+        help_text = b"--safe-mode --restricted --json-schema"
+        for result in [b'{"loggedIn": false}', RuntimeError("blocked"), b'invalid', b'null']:
+            with self.subTest(result=result), patch.object(review, "run", side_effect=[help_text, result]) as runner:
+                with self.assertRaisesRegex(ValueError, "does not prove logout"):
+                    review.main(["--check"])
+                self.assertEqual(runner.call_count, 2)
+                self.assertEqual(runner.call_args.args[0], ["claude", "auth", "status"])
+        with patch.object(review, "run", side_effect=[help_text, b'{"loggedIn": true}']) as runner, contextlib.redirect_stdout(io.StringIO()):
+            review.main(["--check"])
+            self.assertEqual(runner.call_count, 2)
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)

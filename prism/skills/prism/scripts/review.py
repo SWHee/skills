@@ -13,6 +13,13 @@ import sys
 LIMIT = 240_000
 SEVERITIES = ("critical", "high", "medium", "low")
 MODEL = "claude-opus-5-5"
+AUTH_UNAVAILABLE = (
+    "Claude authentication is unavailable in this execution environment; this does not prove logout. "
+    "If the terminal is already authenticated, request the host's approved execution permissions "
+    "and rerun --check there once, then run the review with the same approved permissions. "
+    "Do not copy credentials or bypass permissions. Only suggest 'claude auth login' "
+    "if authentication is also unavailable in the user's normal terminal."
+)
 
 
 def object_schema(properties):
@@ -210,10 +217,10 @@ def main(argv=None):
                 raise ValueError(f"Update Claude Code: missing {flag}")
         try:
             auth = json.loads(run(["claude", "auth", "status"]))
-        except RuntimeError as error:
-            raise ValueError("Claude authentication is unavailable in this execution environment. Check 'claude auth status' in your terminal; if already logged in, use the host's approved execution permissions. Otherwise run 'claude auth login'.") from error
-        if not auth.get("loggedIn"):
-            raise ValueError("Claude is not authenticated. Run claude auth login in your terminal.")
+        except (RuntimeError, ValueError) as error:
+            raise ValueError(AUTH_UNAVAILABLE) from error
+        if not isinstance(auth, dict) or auth.get("loggedIn") is not True:
+            raise ValueError(AUTH_UNAVAILABLE)
         print("Claude CLI supports review and reports authenticated; model access is not tested.")
         return
     if args.output and (not args.output.is_absolute() or args.output.exists() or not args.output.parent.is_dir()):
