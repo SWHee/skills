@@ -1,0 +1,15 @@
+name: 작업 요청
+description: 작업 목적과 완료 조건을 정합니다.
+body:
+  - type: textarea
+    id: purpose
+    attributes:
+      label: 목적
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 완료 조건
+    validations:
+      required: true

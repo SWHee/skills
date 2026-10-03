@@ -36,7 +36,7 @@ $team-start /absolute/project/path에서 시작한 초기 설정을 점검해줘
 
 ## 설치
 
-Python 3.9+, git, 로그인된 GitHub CLI(`gh`)가 필요합니다. 이 폴더는 Codex 플러그인 소스이며 개발 중에는 아래 스킬 하나를 연결합니다. 기존 경로가 있으면 덮어쓰지 않습니다.
+macOS의 Codex 앱에서 검증했습니다. Python 3.9+, git, 로그인된 GitHub CLI(`gh`)가 필요하며, 도우미의 POSIX 파일 잠금 때문에 Windows는 지원하지 않습니다. 이 폴더는 Codex 플러그인 소스이며 개발 중에는 아래 스킬 하나를 연결합니다. 기존 경로가 있으면 덮어쓰지 않습니다.
 
 ```bash
 mkdir -p ~/.codex/skills

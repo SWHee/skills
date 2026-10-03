@@ -1,0 +1,4 @@
+interface:
+  display_name: "Team Start · 팀 프로젝트 시작"
+  short_description: "새 팀 저장소·권한·작업 보드와 협업 안내를 함께 준비"
+  default_prompt: "$team-start 새 팀 프로젝트를 설명할게요. 무료 우선으로 GitHub 협업 환경을 준비해주세요."

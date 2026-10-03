@@ -1,0 +1,16 @@
+{
+  "name": "team-start",
+  "version": "0.1.0",
+  "description": "새 팀 프로젝트의 GitHub 저장소·협업 안내·작업 보드 준비",
+  "author": {"name": "skills-harry"},
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Team Start",
+    "shortDescription": "새 팀 프로젝트의 GitHub 협업 환경 준비",
+    "longDescription": "프로젝트 설명에서 최소 설정을 추천하고 새 저장소, 팀원 초대, 작업 보드, 협업 문서를 준비합니다. 무료 기능 제약과 미완료 항목을 구분하고 초기 설정을 이어갑니다.",
+    "developerName": "skills-harry",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Write"],
+    "defaultPrompt": ["4명이 2주 해커톤을 합니다. 무료로 쓸 팀 저장소를 준비해줘.", "새 팀 프로젝트의 GitHub 설정을 계획만 세워줘.", "Team Start로 만든 프로젝트의 초기 설정을 점검해줘."]
+  }
+}

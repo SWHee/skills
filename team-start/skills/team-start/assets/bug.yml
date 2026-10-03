@@ -1,0 +1,19 @@
+name: 버그 신고
+description: 재현 방법과 기대 결과를 공유합니다.
+body:
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 재현 방법
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 기대 결과와 실제 결과
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 실행 환경
