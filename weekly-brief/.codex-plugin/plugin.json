@@ -1,0 +1,22 @@
+{
+  "name": "weekly-brief",
+  "version": "0.1.0",
+  "description": "주간 기록을 화면용 마크다운 발표 자료와 2~3분 발표 스크립트로 정리",
+  "author": {
+    "name": "skills-harry"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Weekly Brief · 주간 발표",
+    "shortDescription": "발표 주제 선정 · 자료 작성 · 2~3분 스크립트",
+    "longDescription": "주간 작업·협업·트러블슈팅 기록에서 핵심 주제를 선정하고 발표 자료를 작성합니다. 확정된 자료의 사실과 완료 상태를 유지하며 예상 시간을 점검한 낭독문을 만듭니다.",
+    "developerName": "skills-harry",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": [
+      "$weekly-material 아래 기록으로 주간 발표 후보 3개를 추천해줘.",
+      "$weekly-material 아래 기록으로 자료와 스크립트를 바로 작성해줘.",
+      "$weekly-script 아래 확정 자료로 2~3분 발표 스크립트를 작성해줘."
+    ]
+  }
+}

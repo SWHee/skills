@@ -1,0 +1,4 @@
+interface:
+  display_name: "주간 발표 스크립트"
+  short_description: "확정 발표 자료의 사실과 상태를 유지하며 2~3분 낭독 스크립트 작성"
+  default_prompt: "$weekly-script 아래 발표 자료로 2~3분 발표 스크립트를 작성해줘."

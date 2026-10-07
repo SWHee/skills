@@ -27,6 +27,7 @@ Codex App을 중심으로 관리하는 개인용 AI 에이전트 스킬 아카�
 | [Rationale](./rationale/README.md) | 비용·설계·연쇄 영향을 조사해 기술 결정을 돕고 개인 ADR 작성·검토 연결 | `rationale`, `rationale-write`, `rationale-review` |
 | [Team Start](./team-start/README.md) | 새 팀 프로젝트의 GitHub 저장소·권한·보드·협업 안내 준비와 초기 설정 재개 | `team-start` |
 | [Clear Message](./clear-message/README.md) | 받은 협업 메시지의 맥락·요청 파악과 보낼 초안의 전달 순서 정리 | `read-message`, `write-message` |
+| [Weekly Brief](./weekly-brief/README.md) | 주간 기록의 핵심 주제 선정과 화면용 발표 자료·2~3분 스크립트 작성 | `weekly-material`, `weekly-script` |
 
 플러그인은 관련 스킬을 하나로 묶습니다. 설치와 개발용 실행 방법은 해당 플러그인의 README를 따릅니다.
 

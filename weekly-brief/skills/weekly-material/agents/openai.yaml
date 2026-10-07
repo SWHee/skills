@@ -1,0 +1,4 @@
+interface:
+  display_name: "주간 발표 자료"
+  short_description: "주간 기록에서 핵심 주제를 골라 사실과 진행 상태를 보존한 발표 자료 작성"
+  default_prompt: "$weekly-material 아래 주간 기록으로 발표 후보 3개를 추천해줘."
