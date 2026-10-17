@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tackle · 문제 이해와 해결"
+  short_description: "모호한 개발 문제를 정의하고 근거 조사부터 판단·해결 확인까지 연결"
+  default_prompt: "$tackle 이 문제의 원인과 해결 방향을 조사해줘. 코드 수정이 필요한지는 조사 결과를 보고 결정할게."
